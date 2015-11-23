@@ -1,0 +1,387 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+
+    <style>
+    body {
+    background: #000;
+    margin: 0;
+        }
+
+canvas {
+    cursor: crosshair;
+    display: block;
+        }
+
+</style>
+
+ <script>
+ var canvas;
+ var context;
+ var context2;
+ var particles;
+ var timer = 0;
+ var ga = 0.0;
+ var timerRestart;
+
+
+function init() {
+        canvas = document.getElementById('layer3');
+        context = canvas.getContext("2d");
+ 
+        window.addEventListener('resize', resizeCanvas, false);
+        window.addEventListener('orientationchange', resizeCanvas, false);
+        resizeCanvas();
+        layer3.onclick = function(event) {
+            handleClick(event.clientX, event.clientY);
+        };
+        timer = setInterval(resizeCanvas, 20);
+    
+          }
+
+function init2()
+            {
+                canvas = document.getElementById("can");
+                context = canvas.getContext("2d");
+                timer = setInterval("fadeIn()", 200);
+            }
+
+function fadeIn()
+            {
+                context.clearRect(0,0, canvas.width,canvas.height);
+                context.globalAlpha = ga;
+                var image = new Image();
+                image.onload = function()
+                {
+                    context.drawImage(image, canvas.width/2, canvas.height/2, 20, 200, 500);
+                };
+                image.src = "down.png";
+
+                ga = ga + 0.05;
+                if (ga > 1.0)
+                {
+                    goingUp = false;
+                    clearInterval(timer);
+                }
+            }
+
+function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        for (var i=0; i<particles.length; i++) {
+            drawCircle(particles[i]);
+         }
+      }
+
+function titleText(){
+    x = layer3.width/2;
+    y= layer3.height/2;
+
+    var text;
+    text = ["A Virtual Spectacle"];
+
+    context.globalCompositeOperation = "source-over";
+    context.fillStyle = "rgba(0,0,0,3)";
+    context.fillRect(0, 0, layer3.width, layer3.height);
+    
+    context.globalCompositeOperation = "lighter"; 
+
+   
+    for(var i = 0; i<text.length; i++){
+        context.font = "bold 100px Helvetica";
+        context.fillStyle = "red";
+        context.fillText(text,x,y);
+        context.textAlign = "center";
+
+    
+    }
+
+}
+
+ function makeParticles() {
+    //create an array of particles for our animation
+    particles = [];
+    for(var i = 0; i < 30; i++)
+    {
+        particles.push(new Particle());
+    }
+ }
+ function degreesToRadians(degrees) {
+     //converts from degrees to radians and returns
+     return (degrees * Math.PI)/180;
+ }
+ function Particle()
+ {
+     //the constructor for a single particle, with random starting x+y, velocity, color, and radius
+     //this.x = Math.random()*canvas.width;
+     //this.y = Math.random()*canvas.height;
+     this.x = canvas.width/2;
+     this.y = canvas.height/2;
+     this.vx = Math.random()*10-5;
+     this.vy = Math.random()*10-5;
+     var colors = ["MediumAquamarine", "Aqua", "Cyan", "LightCyan", "PaleGreen", "Azure", "PaleTurquoise", "Turquoise", "Aquamarine", "YellowGreen", "MediumTurquoise", "LightSeaGreen", "CadetBlue", "DeepSkyBlue", "DarkCyan", "Teal", "Navy", "Salmon"];
+     this.color = colors[Math.floor(Math.random()*colors.length)];
+     this.radius = 30;
+ }
+ function moveParticles() {
+     //partially clear the screen to fade previous circles, and draw a new particle at each new coordinate
+     context.globalCompositeOperation = "source-over";
+     context.fillStyle = "rgba(0, 0, 0, 0.3)";
+     context.fillRect(0, 0, canvas.width, canvas.height);
+     context.globalCompositeOperation = "lighter";
+     for(var i = 0; i < particles.length; i++)
+     {
+         var p = particles[i];
+         context.beginPath();
+         context.arc(p.x, p.y, p.radius, 0, degreesToRadians(360), true);
+         context.fillStyle = p.color;
+         context.fill();
+         p.x += p.vx;
+         p.y += p.vy;
+         if(p.x < -50) p.x = canvas.width+50;
+         if(p.y < -50) p.y = canvas.height+50;
+         if(p.x > canvas.width+50) p.x = -50;
+         if(p.y > canvas.height+50) p.y = -50;
+         p.radius -= 1;
+     }
+ }
+
+function makeParticles2() {
+    //create an array of particles for our animation
+    particles = [];
+    for(var i = 0; i < 30; i++)
+    {
+        particles.push(new Particle2());
+    }
+ }
+
+ function Particle2()
+ {
+     //the constructor for a single particle, with random starting x+y, velocity, color, and radius
+     //this.x = Math.random()*canvas.width;
+     //this.y = Math.random()*canvas.height;
+     this.x =  Math.random()*canvas.width;
+     this.y = Math.random()*canvas.height;
+     this.vx = Math.random()*10-5;
+     this.vy = Math.random()*10-5;
+     var colors = ["Orchid", "BlueViolet", "DarkMagenta", "Lavender", "DarkSlateBlue", "IndianRed", "Tomato", "Coral", "Crimson"];
+     this.color = colors[Math.floor(Math.random()*colors.length)];
+     this.radius = 20;
+ }
+
+ function moveParticles2() {
+     //partially clear the screen to fade previous circles, and draw a new particle at each new coordinate
+     context.globalCompositeOperation = "source-over";
+     context.fillStyle = "rgba(0, 0, 0, 0.3)";
+     context.fillRect(0, 0, canvas.width, canvas.height);
+     context.globalCompositeOperation = "lighter";
+     for(var i = 0; i < particles.length; i++)
+     {
+         var p = particles[i];
+         context.beginPath();
+         context.arc(p.x, p.y, p.radius, 0, degreesToRadians(360), true);
+         context.fillStyle = p.color;
+         context.fill();
+         p.x += p.vx;
+         p.y += p.vy;
+         if(p.x < -50) p.x = canvas.width+50;
+         if(p.y < -50) p.y = canvas.height+50;
+         if(p.x > canvas.width+50) p.x = -50;
+         if(p.y > canvas.height+50) p.y = -50;
+         p.radius -= 1;
+     }
+ }
+
+ function makeParticles3() {
+    //create an array of particles for our animation
+    particles = [];
+    for(var i = 0; i < 40; i++)
+    {
+        particles.push(new Particle3());
+    }
+ }
+
+ function Particle3()
+ {
+     //the constructor for a single particle, with random starting x+y, velocity, color, and radius
+     //this.x = Math.random()*canvas.width;
+     //this.y = Math.random()*canvas.height;
+     this.x =  canvas.width/4;
+     this.y = canvas.height/4;
+     this.vx = Math.random()*10-5;
+     this.vy = Math.random()*10-5;
+     var colors = ["Gold", "Yellow", "PapayaWhip", "Khaki", "SpringGreen", "GreenYellow"];
+     this.color = colors[Math.floor(Math.random()*colors.length)];
+     this.radius = 30;
+ }
+
+ function moveParticles3() {
+     //partially clear the screen to fade previous circles, and draw a new particle at each new coordinate
+     context.globalCompositeOperation = "source-over";
+     context.fillStyle = "rgba(0, 0, 0, 0.3)";
+     context.fillRect(0, 0, canvas.width, canvas.height);
+     context.globalCompositeOperation = "lighter";
+     for(var i = 0; i < particles.length; i++)
+     {
+         var p = particles[i];
+         context.beginPath();
+         context.arc(p.x, p.y, p.radius, 0, degreesToRadians(360), true);
+         context.fillStyle = p.color;
+         context.fill();
+         p.x += p.vx;
+         p.y += p.vy;
+         if(p.x < -50) p.x = canvas.width+50;
+         if(p.y < -50) p.y = canvas.height+50;
+         if(p.x > canvas.width+50) p.x = -50;
+         if(p.y > canvas.height+50) p.y = -50;
+         p.radius -= 1;
+     }
+ }
+
+
+  function makeParticles4() {
+    //create an array of particles for our animation
+    particles = [];
+    for(var i = 0; i < 20; i++)
+    {
+        particles.push(new Particle4());
+    }
+ }
+
+ function Particle4()
+ {
+     //the constructor for a single particle, with random starting x+y, velocity, color, and radius
+     //this.x = Math.random()*canvas.width;
+     //this.y = Math.random()*canvas.height;
+     this.x =  canvas.width/3;
+     this.y = canvas.height/5;
+     this.vx = Math.random()*10-5;
+     this.vy = Math.random()*10-5;
+     var colors = ["OrangeRed", "DarkOrange", "Yellow", "DarkSalmon", "RebeccaPurple", "Crimson"];
+     this.color = colors[Math.floor(Math.random()*colors.length)];
+     this.radius = 20;
+ }
+
+ function moveParticles4() {
+     //partially clear the screen to fade previous circles, and draw a new particle at each new coordinate
+     context.globalCompositeOperation = "source-over";
+     context.fillStyle = "rgba(0, 0, 0, 0.3)";
+     context.fillRect(0, 0, canvas.width, canvas.height);
+     context.globalCompositeOperation = "lighter";
+     for(var i = 0; i < particles.length; i++)
+     {
+         var p = particles[i];
+         context.beginPath();
+         context.arc(p.x, p.y, p.radius, 0, degreesToRadians(360), true);
+         context.fillStyle = p.color;
+         context.fill();
+         p.x += p.vx;
+         p.y += p.vy;
+         if(p.x < -50) p.x = canvas.width+50;
+         if(p.y < -50) p.y = canvas.height+50;
+         if(p.x > canvas.width+50) p.x = -50;
+         if(p.y > canvas.height+50) p.y = -50;
+         p.radius -= 1;
+     }
+ }
+
+function makeParticles5() {
+    //create an array of particles for our animation
+    particles = [];
+    for(var i = 0; i < 30; i++)
+    {
+        particles.push(new Particle5());
+    }
+ }
+
+ function Particle5()
+ {
+     //the constructor for a single particle, with random starting x+y, velocity, color, and radius
+     //this.x = Math.random()*canvas.width;
+     //this.y = Math.random()*canvas.height;
+     this.x =  canvas.width/1.2;
+     this.y = canvas.height/2;
+     this.vx = Math.random()*10-5;
+     this.vy = Math.random()*10-5;
+     var colors = ["Green", ,"Tomato", "Gold", "PapayaWhip", "Khaki", "SpringGreen", "GreenYellow", "LightSeaGreen"];
+     this.color = colors[Math.floor(Math.random()*colors.length)];
+     this.radius = 20;
+ }
+
+ function moveParticles5() {
+     //partially clear the screen to fade previous circles, and draw a new particle at each new coordinate
+     context.globalCompositeOperation = "source-over";
+     context.fillStyle = "rgba(0, 0, 0, 0.3)";
+     context.fillRect(0, 0, canvas.width, canvas.height);
+     context.globalCompositeOperation = "lighter";
+     for(var i = 0; i < particles.length; i++)
+     {
+         var p = particles[i];
+         context.beginPath();
+         context.arc(p.x, p.y, p.radius, 0, degreesToRadians(360), true);
+         context.fillStyle = p.color;
+         context.fill();
+         p.x += p.vx;
+         p.y += p.vy;
+         if(p.x < -50) p.x = canvas.width+50;
+         if(p.y < -50) p.y = canvas.height+50;
+         if(p.x > canvas.width+50) p.x = -50;
+         if(p.y > canvas.height+50) p.y = -50;
+         p.radius -= 1;
+     }
+ }
+
+
+ function clearScreen(color) {
+     //clears the screen and fills with the color of choice
+     context.clearRect(0, 0, canvas.width, canvas.height);
+     context.fillStyle = color;
+     context.fillRect(0, 0, canvas.width, canvas.height);
+ }
+ window.onload = function() {
+     canvas = document.getElementById('layer2');
+     context = canvas.getContext('2d');
+
+    var c = document.getElementById("layer2");
+    var ctx = c.getContext("2d");
+    var img = document.getElementById("city");
+    ctx.drawImage(city, 1280, 960);
+
+
+     makeParticles();
+     timer = setInterval(moveParticles, 100);
+     timerRestart = setInterval(makeParticles, 4500);
+
+     makeParticles2();
+     timer = setInterval(moveParticles2, 150);
+     timerRestart = setInterval(makeParticles2, 5000);
+
+     makeParticles3();
+     timer = setInterval(moveParticles3, 100);
+     timerRestart = setInterval(makeParticles3, 4000);
+
+     makeParticles4();
+     timer = setInterval(moveParticles4, 150);
+     timerRestart = setInterval(makeParticles4, 3800);
+
+     makeParticles5();
+     timer = setInterval(moveParticles5, 100);
+     timerRestart = setInterval(makeParticles5, 3000);
+
+    titleText();
+    timer = setInterval(titleText(), 200);
+    
+ }
+</script>
+
+    </head>
+    <body onload="init()", "init2()">
+        <img id="down" width = "200" height= "300" src= "down.png" style="z-index: 2; position: absolute; left:550px; top: 1500px;">
+        <img id="city" width="1280" height="960" src="city.png" style="z-index: 2; position: absolute; left:0px; top: 1800px;">
+       <canvas id='canvas' width="1280" height="960"></canvas>
+       <canvas id='layer2' width="1280" height="960" ></canvas>
+       <canvas id='layer3' width="1280" height="960"></canvas>
+
+    </body>
+</html>
